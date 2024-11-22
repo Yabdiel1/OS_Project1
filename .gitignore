@@ -1,0 +1,17 @@
+# Ignore build directories
+build/
+bin/
+obj/
+
+# Ignore temporary files
+*.tmp
+*.log
+
+# Ignore compiled binaries
+*.o
+*.so
+*.exe
+
+# Ignore specific files
+config.local
+debug.log
