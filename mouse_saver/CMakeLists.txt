@@ -12,6 +12,7 @@ include_directories(include)
 
 # Add the executable
 add_executable(mouse_saver
+    src/functions.c
     src/main.c
 )
 
