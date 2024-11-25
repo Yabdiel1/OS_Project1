@@ -32,7 +32,7 @@ int main() {
     close(fd);
     return EXIT_FAILURE;
   }
-  printf("Reading from %s. Move your mouse.", device);
+  printf("Reading from %s. Move your mouse.\n", device);
 
   int abs_x = 0;
   int abs_y = 0;

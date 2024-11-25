@@ -11,9 +11,9 @@ project(mouse_plotter)
 include_directories(include)
 
 # Add the executable
-add_executable(mouse_plotter
+add_executable(${CMAKE_PROJECT_NAME}
     src/main.c
 )
 
-# Link the math library
-# target_link_libraries(imu_driver m)
+target_link_libraries(${CMAKE_PROJECT_NAME}
+    ncurses)
