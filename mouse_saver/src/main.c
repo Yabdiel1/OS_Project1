@@ -1,4 +1,5 @@
 #include <fcntl.h>
+#include <math.h>
 #include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -49,20 +50,20 @@ int main() {
 
       // 1024 abs positions / 100 = 10.24
       if (abs_x <= 0) {
-        terminal_x = (512 - abs(abs_x)) / 10.24;
+        terminal_x = ((MAX_X / 2) - abs(abs_x)) / 10.24;
       } else {
-        terminal_x = (512 + abs_x) / 10.24;
+        terminal_x = ((MAX_X / 2) + abs_x) / 10.24;
       }
 
       // 768 abs positions / 25 = 30.72
       if (abs_y < 0) {
-        terminal_y = (384 + abs(abs_y)) / 30.72;
+        terminal_y = ((MAX_Y / 2) + abs(abs_y)) / 30.72;
       } else {
-        terminal_y = (384 - abs_y) / 30.72;
+        terminal_y = ((MAX_Y / 2) - abs_y) / 30.72;
       }
 
-      int terminal_x_int = (int)terminal_x;
-      int terminal_y_int = (int)terminal_y;
+      int terminal_x_int = round(terminal_x);
+      int terminal_y_int = round(terminal_y);
 
       // Save coordinates to the binary file
       fwrite(&terminal_x_int, sizeof(int), 1, file);

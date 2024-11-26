@@ -1,25 +1,44 @@
 #include <curses.h>
+#include <signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <time.h>
 #include <unistd.h>
 
+#include "functions.h"
 #include "stdlib.h"
 
+int flag = 0;
+
 int main() {
-  pid_t child = fork();
-
-  if (child == 0) {
-    if (execl("/bin/ln", "ln", "-sf", "../../mouse_saver/build/mouse_data.dat",
-              "sym", NULL) == -1) {
-      perror("error executing child with sym link creation");
-      exit(EXIT_FAILURE);
-    }
-  } else {
-    wait(NULL);
-  }
-
   FILE *file;
   ssize_t nread;
+
+  timer_t timer_id;
+  struct sigevent sev;
+  struct itimerspec its;
+
+  signal(SIGALRM, TimerHandler);
+
+  sev.sigev_notify = SIGEV_SIGNAL;
+  sev.sigev_signo = SIGALRM;
+  sev.sigev_value.sival_ptr = &timer_id;
+
+  if (timer_create(CLOCK_REALTIME, &sev, &timer_id) == -1) {
+    perror("timer_create");
+    exit(1);
+  }
+
+  its.it_value.tv_sec = 0;
+  its.it_value.tv_nsec = 10 * 1e6;
+  its.it_interval.tv_sec = 0;
+  its.it_interval.tv_nsec = 10 * 1e6;
+
+  // Start the timer
+  if (timer_settime(timer_id, 0, &its, NULL) == -1) {
+    perror("timer_settime");
+    exit(1);
+  }
 
   initscr();
   keypad(stdscr, TRUE);
@@ -41,12 +60,12 @@ int main() {
       int int_y = (int)*y;
 
       clear();
-      mvprintw(0, 0, "%d", int_x);
-      mvprintw(0, 2, "%d", int_y);
       mvprintw(int_y, int_x, "*");
       refresh();
 
-      usleep(10000); /* Duerme por 10ms */
+      flag = 1;
+      while (flag) {
+      }
     }
     if (ferror(file)) {
       /* deal with error */

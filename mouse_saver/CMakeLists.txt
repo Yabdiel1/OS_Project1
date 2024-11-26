@@ -16,5 +16,4 @@ add_executable(mouse_saver
     src/main.c
 )
 
-# Link the math library
-# target_link_libraries(imu_driver m)
+target_link_libraries(mouse_saver m)
